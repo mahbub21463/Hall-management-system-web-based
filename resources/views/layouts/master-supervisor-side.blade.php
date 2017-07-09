@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head> 
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    @yield('title');
+
+   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+   
+ 
+    
+    @yield('stylesheets')
+
+   
+    <link href="/css/sidebar.css" type="text/css" rel="stylesheet">
+    <link href="/css/navbar.css" type="text/css" rel="stylesheet">
+
+    </head>
+
+    <body>
+      
+      
+
+      <div id="wrapper">
+
+
+  
+      
+    
+
+                
+
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
+
+       
+
+             <!-- Collect the nav links, forms, and other content for toggling -->
+             <div class="collapse navbar-collapse">
+               <ul class="nav navbar-nav">
+               <li>
+                 <h4><span class="label label-primary">Welcome to {{Auth::user()->hall}} Hall</span></h4>
+               </li>
+                <li>
+                     <a href="#menu-toggle" id="menu-toggle"><span class="glyphicon glyphicon-menu-hamburger"></span></a>  
+                </li>
+                <li class="{{Request::is('/')?'active':''}}"><a href="/">Home </a></li>
+                
+                <li class="{{Request::is('/')?'active':''}}"><a href="#">Alumni</a></li>
+                <li class="{{Request::is('/')?'active':''}}"><a href="#">Achievements</a></li>
+                <li class="{{Request::is('/')?'active':''}}"><a href="#">Provost List</a></li>
+                
+             </ul>
+
+             <ul class="nav navbar-nav navbar-right">
+                <li>
+                
+                
+                <li class="{{Request::is('/')?'active':''}}"><a href="#">Notice Board</a></li>
+               
+                <li class="{{Request::is('/')?'active':''}}"><a href="#">Notification</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" style="background-color:#006400" data-toggle="dropdown" role="button" aria-expanded="false">
+                    <?php 
+                      if(Auth::user()->user_type === 'student')
+                      {
+                         $username = App\Student::where('student_id',Auth::user()->username)->first()->name;
+                      }
+                      else if(Auth::user()->user_type === 'supervisor' || Auth::user()->user_type == 'provost')
+                      {
+                        $username = App\Employee::where('employee_id',Auth::user()->username)->first()->name;
+                      }
+                      echo $username;
+                    ?>
+
+                    <span class="caret"></span>
+                    </a>
+
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                          <a href="{{ url('/profile') }}"><span class="glyphicon glyphicon-user"></span>Profile</a>
+                        </li>
+                        <li>
+                           <a href="{{ url('/logout') }}"><span class="
+glyphicon glyphicon-log-out"></span>Logout</a>
+                        </li>
+                        
+                    </ul>
+                </li>
+                
+
+             </ul>
+
+        
+        <form class="navbar-form" href="/search" method="get">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" name="search" id="srch-term">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+            </div>
+        </div>
+        </form>
+         
+            </div><!-- /.navbar-collapse -->
+
+        </nav>
+     
+     
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                    <li class="{{Request::is('students')?'active':''}}">
+                            <a href="/students" ><b>Show Student Database</b></a>
+                        </li>
+
+                        <li class="{{Request::is('students/create')?'active':''}}">
+                            <a href="/students/create"><b>Add New Student</b></a>
+                        </li>
+
+                        <li class="{{Request::is('/')?'active':''}}">
+                            <a href="#"><b>Events</b></a>
+                        </li>
+
+                        
+                         <li class="{{Request::is('dues')?'active':''}}">
+                            <a href="/dues"><b>Show All Dues</b></a>
+                        </li>
+                        <li class="{{Request::is('dues/create')?'active':''}}">
+                            <a href="/dues/create"><b>Update Dues</b></a>
+                        </li>
+                        <li class="{{Request::is('complaints')?'active':''}}">
+                            <a href="/complaints"><b>Complain Box</b></a>
+                        </li>
+                        <li>
+                            <a href="#"><b></b></a>
+                        </li>
+                        <li>
+                            <a href="#"><b>Mess</b></a>
+                        </li>
+                        <li class="{{Request::is('payments')?'active':''}}">
+                            <a href="/payments"><b>Show Payments</b></a>
+                        </li>
+                        <li class="{{Request::is('payments/create')?'active':''}}">
+                            <a href="/payments/create"><b>Submit Payment Details</b></a>
+                        </li>
+                        <li>
+                            <a href="#"><b>Change Password</b></a>
+                        </li>    
+
+
+                        
+
+            </ul>
+        </div>
+
+        <div class="container-fluid"  style="margin-top:31px">
+              @yield('content')
+        </div>     
+
+   </div>
+   <!-- /#wrapper -->
+    
+<!-- jQuery -->
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+@yield('scripts')
+<script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+
+</body>
+
+</html>
